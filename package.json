@@ -1,5 +1,8 @@
 {
-  "author": "Markus Wunderlin <markus@sonium.org>",
+  "author": {
+    "name": "Markus Wunderlin",
+    "email": "markus@sonium.org"
+  },
   "name": "alligator-metrics",
   "version": "0.1.0",
   "description": "Ganglia metrics reporter.",
