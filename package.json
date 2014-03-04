@@ -19,5 +19,6 @@
     "actionhero": "7.4.2",
     "gmetric": "~0.2.2"
   },
-  "repository": "https://github.com/alligator-io/alligator-metrics.git"
+  "repository": "https://github.com/alligator-io/alligator-metrics.git",
+  "license" : "MIT"
 }
