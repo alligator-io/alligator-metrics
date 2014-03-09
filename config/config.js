@@ -48,7 +48,7 @@ config.general = {
   startingChatRooms: {
     // format is {roomName: {authKey, authValue}}
     //'secureRoom': {authorized: true},
-    'defaultRoom': {}
+  
   }
 };
 
@@ -105,7 +105,7 @@ config.stats = {
 
 config.redis = {
   fake: true,
-  host: '127.0.0.1',
+  host: 'localhost',
   port: 6379,
   password: null,
   options: null,

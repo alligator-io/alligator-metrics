@@ -16,7 +16,9 @@ var metrics = function(api, next){
       api.log('! uncaught error from metric: ' + e.message, 'alert');
     }
     api.exceptionHandlers.renderError(err);
-    domain.dispose();
+    if(api.metrics.timers[metric.name]!=null)clearInterval(api.metrics.timers[metric.name]);
+    delete api.metrics.timers[metric.name];
+    domain.exit();
   };
 
   api.metrics.validateMetric = function(metric){
@@ -151,6 +153,8 @@ var metrics = function(api, next){
       }
     } catch(err){
       api.exceptionHandlers.loader(fullFilePath, err);
+      if(api.metrics.timers[metric.name]!=null)clearInterval(api.metrics.timers[metric.name]);
+      delete api.metrics.timers[metric.name];
       delete api.metrics.metrics[metric.name];
     }
   };
