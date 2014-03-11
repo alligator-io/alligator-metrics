@@ -161,8 +161,13 @@ config.metrics={
     host:'localhost',
     port: 6379,
     database:0
-  }
+  },
   */
+  // load elasticsearch metrics
+  /*elasticsearch:{
+    host:"http://localhost:9200",
+    log:['error']
+  }*/
 };
 
 /////////////

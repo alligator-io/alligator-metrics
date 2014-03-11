@@ -7,7 +7,7 @@ exports.elasticsearch={
   units: '',
   slope: 'zero',
   type: 'uint32',
-  description:'Metrics for Redis Info',
+  description:'Metrics for Elasticsearch',
   interval:15000,
   tmax:90,
   dmax:120,
