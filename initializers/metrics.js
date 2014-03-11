@@ -117,7 +117,6 @@ var metrics = function(api, next){
 
   api.metrics.loadFile = function(fullFilePath, reload){
     if(reload == null){ reload = false; }
-
     var loadMessage = function(metric){
       var msgString = '';
       if(reload){
@@ -141,15 +140,17 @@ var metrics = function(api, next){
     try {
       var collection = require(fullFilePath);
       for(var i in collection){
-        var metric = collection[i];
-        if(!metric.hostname)metric.spoof = false;
-        if(!metric.hostname)metric.hostname = os.hostname();
-        if(!metric.group)metric.group=api.config.general.shortName;
-        if(!metric.type)metric.type='int32'
-        if(reload)api.metrics.startTimer(metric);
-        api.metrics.metrics[metric.name] =metric;
-        api.metrics.validateMetric(metric);
-        loadMessage(metric);
+        var metric = collection[i];  
+        if(api.utils.isPlainObject(api.config.metrics) && api.config.metrics[metric.name]){
+          if(!metric.spoof)metric.spoof = false;
+          if(!metric.hostname)metric.hostname = os.hostname();
+          if(!metric.group)metric.group=api.config.general.shortName;
+          if(!metric.type)metric.type='int32';
+            if(reload)api.metrics.startTimer(metric);
+          api.metrics.metrics[metric.name] =metric;
+          api.metrics.validateMetric(metric);
+          loadMessage(metric);
+        }
       }
     } catch(err){
       api.exceptionHandlers.loader(fullFilePath, err);

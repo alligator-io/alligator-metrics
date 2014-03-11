@@ -95,7 +95,6 @@ config.stats = {
   // what redis key(s) [hash] should be used to store stats?
   //  provide no key if you do not want to store stats
   keys: [
-    'actionHero:stats'
   ]
 }
 
@@ -156,7 +155,16 @@ config.metrics={
     host:'localhost',
     port:8649
   }]
-}
+  /*, 
+  // load redis metrics
+  redis:{
+    host:'localhost',
+    port: 6379,
+    database:0
+  }
+  */
+};
+
 /////////////
 // SERVERS //
 /////////////
