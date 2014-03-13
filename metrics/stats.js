@@ -35,7 +35,7 @@ exports.stats={
       getValue('connections:totalActiveConnections',function(err,value){
         if(err)return done(err);
         var activeMetric = api.utils.objClone(metric);
-        activeMetric.name += '_active';
+        activeMetric.name += '_total_active_connections';
         activeMetric.title += ' Active Connections';
         activeMetric.value = value||0;
        
@@ -43,6 +43,7 @@ exports.stats={
         getValue('connections:totalConnections',function(err,value){
           if(err)return done(err);
           var totalMetric = api.utils.objClone(metric);
+          totalMetric.name +='_total_connections';
           totalMetric.value = value||0;
           totalMetric.title += ' Total Connections';
           send(totalMetric);
