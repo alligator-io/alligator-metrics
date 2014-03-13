@@ -154,8 +154,19 @@ config.metrics={
   hosts:[{
     host:'localhost',
     port:8649
-  }]
-  /*, 
+  }],
+  /*
+  // load actionhero stats metrics
+  stats:{
+    keys:['actionHero:stats'],
+    redis:{
+      host:'localhost',
+      port: 6379,
+      database:0
+    }
+  },
+  */
+  /* 
   // load redis metrics
   redis:{
     host:'localhost',
