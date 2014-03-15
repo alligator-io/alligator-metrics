@@ -60,7 +60,7 @@ exports.stats={
       });
       client.on('ready',function(){
         getValue=function(key,next){
-          api.redis.client.hget(collection, key, function(err, value){
+          client.hget(collection, key, function(err, value){
             next(err, value);
           });
         };
