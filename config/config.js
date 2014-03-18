@@ -11,7 +11,7 @@ var config = {};
 /////////////////////////
 
 config.general = {
-  apiVersion: '0.0.1',
+  apiVersion: '0.2.0',
   serverName: 'Alligator Metrics',
   // id can be set here, or it will be generated dynamically.
   //  Be sure that every server you run has a unique ID (which will happen when generated dynamically)
