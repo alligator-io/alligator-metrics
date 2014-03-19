@@ -167,7 +167,7 @@ var metrics = function(api, next){
     next();
   };
 
-  api.metrics._teardown=function(api,next){
+  api.metrics._stop=function(api,next){
     api.metrics.stopTimers();
     api.log('timers for metrics stopped','info');
     next();

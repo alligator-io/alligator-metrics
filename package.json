@@ -19,7 +19,7 @@
     "reporter"
   ],
   "dependencies": {
-    "actionhero": "7.5.2",
+    "actionhero": "7.6.11",
     "gmetric": "~0.2.2",
     "redis": "~0.10.1",
     "elasticsearch": "~1.5.11"
