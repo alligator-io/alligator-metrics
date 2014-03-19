@@ -8,7 +8,7 @@
   "description": "Ganglia metrics reporter.",
   "main": "./initializers/metrics.js",
   "scripts": {
-    "start": "node node_modules/.bin/actionHero start"
+    "start": "node node_modules/.bin/actionhero start"
   },
   "keywords": [
     "actionhero",
