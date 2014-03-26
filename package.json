@@ -4,7 +4,7 @@
     "email": "markus@sonium.org"
   },
   "name": "alligator-metrics",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Ganglia metrics reporter.",
   "main": "./initializers/metrics.js",
   "scripts": {
