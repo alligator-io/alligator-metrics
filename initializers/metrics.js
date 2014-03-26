@@ -1,5 +1,4 @@
 var domain = require('domain');
-var fs = require('fs');
 var Gmetric = require('gmetric');
 var util = require('util');
 var os = require('os');
@@ -39,37 +38,6 @@ var metrics = function(api, next){
       return false;
     }
     return true;
-  }
-
-  api.metrics.loadDirectory = function(path){
-
-    if(path == null){
-      path = api.config.general.paths.metric;
-
-      if(!fs.existsSync(api.config.general.paths.metric)){
-        api.log(api.config.general.paths.metric + ' defined as metrics path, but does not exist', 'warning');
-      }
-    }
-
-    fs.readdirSync(path).forEach( function(file) {
-      if(path[path.length - 1] != '/'){ path += '/' }
-      var fullFilePath = path + file;
-      if(file[0] != '.'){
-        var stats = fs.statSync(fullFilePath);
-        if(stats.isDirectory()){
-          api.metrics.loadDirectory(fullFilePath);
-        } else if(stats.isSymbolicLink()){
-          var realPath = fs.readlinkSync(fullFilePath);
-          api.metrics.loadDirectory(realPath);
-        } else if(stats.isFile()){
-          var fileParts = file.split('.');
-          var ext = fileParts[(fileParts.length - 1)];
-          if(ext === 'js'){ api.metrics.loadFile(fullFilePath) }
-        } else {
-          api.log(file + ' is a type of file I cannot read', 'error')
-        }
-      }
-    });
   }
 
   api.metrics.startTimer = function(metric){
@@ -141,15 +109,18 @@ var metrics = function(api, next){
       var collection = require(fullFilePath);
       for(var i in collection){
         var metric = collection[i];  
-        if(api.utils.isPlainObject(api.config.metrics) && api.config.metrics[metric.name]){
+        if(api.utils.isPlainObject(api.config.metrics) && api.config.metrics[metric.name] && api.config.metrics[metric.name].enabled===true){
           if(!metric.spoof)metric.spoof = false;
           if(!metric.hostname)metric.hostname = os.hostname();
           if(!metric.group)metric.group=api.config.general.shortName;
           if(!metric.type)metric.type='int32';
-            if(reload)api.metrics.startTimer(metric);
+          if(reload)api.metrics.startTimer(metric);
           api.metrics.metrics[metric.name] =metric;
           api.metrics.validateMetric(metric);
           loadMessage(metric);
+        }else if(api.metrics.metrics[metric.name]){
+          clearInterval(api.metrics.timers[metric.name]);
+          delete api.metrics.timers[metric.name];
         }
       }
     } catch(err){
@@ -173,8 +144,11 @@ var metrics = function(api, next){
     next();
   };
 
-  api.metrics.loadDirectory();
-
+  api.config.general.paths.metrics.forEach(function(p){
+    api.utils.recusiveDirecotryGlob(p).forEach(function(f){
+      api.metrics.loadFile(f);
+    });
+  })
   next();
 };
 
