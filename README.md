@@ -4,22 +4,48 @@ alligator-metrics is a Ganglia metrics reporter.
 #Quick Start
 `git clone git://github.com/alligator-io/alligator-metrics.git`
 
-`vi config/config.js`
+`vi config/metrics.js`
 
 `npm start`
+
 #Configuration
-Add Ganglia masters to array 
+Config files for metrics in config/metrics
+##General
+- Edit config/metrics.js
+- Add Ganglia masters to array 
 ```javascript
-config.metrics={
+return {
   hosts:[{
-    host:'localhost',
+    host:'localhost', 
     port:8649 // gmond port
   }]
-}
+};
 ```
-#Metrics
+## Redis Metrics
+- Edit config/metrics/redis.js
+```javascript
+ return {
+      redis:{
+        enabled:true, // enable/disable
+        host:'localhost',
+        port: 6379,
+        database:0
+      }
+    };
+```
+## Elasticsearch Metrics
+- Edit config/metrics/elasticsearch.js
+```javascript
+return { 
+  elasticsearch:{
+    enabled:true, // enable/disable
+    host:"http://localhost:9200",
+    log:['error']
+  }
+};
+```
 
-## Creating a Metric
+# Creating a Metric
 You can create you own Metric by placing them in a ./metrics/ folder
 create a yourMetric.js file.
 Here's an example of a simple metric which will report to ganglia the number of cpus:
@@ -42,7 +68,7 @@ exports.cpus={
   }
 };
 ```
-##Metric Options
+#Metric Options
 ```javascript
 title:'NodeJS CPUs Count',
 name: 'node_cpu_num',
@@ -55,3 +81,68 @@ interval:1200,  // Periodic reporting interval in milliseconds
 tmax:10,
 dmax:60
 ```
+#Plugins
+## Creating a Plugin
+* Create a project with the following structure:
+```text
+/
+  initializers/
+  metrics/
+  scripts/
+  config/
+  package.json
+```
+* Write an metric file in metrics/ folder for example:
+
+  **[See the Creating a Metric section](#creating-a-metric)**
+
+- Write an config file for the metric to config/ folder for example config/metrics/cpu.js:
+```javascript
+exports.default = {
+  metrics: function(api){
+    return { 
+      'node_cpu_num':{
+        enabled:true
+      }
+    };
+  }
+}
+```
+- Write an config install script to scripts/postinstall.js file for example:
+```javascript
+#!/usr/bin/env node
+
+var fs = require('fs');
+var path = require('path');
+
+var localConfig   = path.normalize(__dirname + '/../config/cpu.js');
+var configPath = path.normalize(process.cwd() + '/../../config/metrics');
+var config = path.normalize(process.cwd() + '/../../config/metrics/cpu.js');
+
+if(!fs.existsSync(config)){
+  console.log("coppying " + localConfig + " to " + config)
+  try{ fs.mkdirSync(configPath); }catch(e){ }
+  fs.createReadStream(localConfig).pipe(fs.createWriteStream(config));
+}
+```
+- Add to package.json the install script:
+```javascript
+"scripts": {
+  "postinstall": "scripts/postinstall.js"
+}
+```
+
+## Including a Plugin
+- Add to package.json your plugin:
+```JSON
+  "dependencies": {
+    "am-your-plugin":"1.0.0"
+  }
+```
+- Add to config/api.js your plugin:
+```javascript
+metrics:[ // this is a list of metric plugin names
+  'am-your-plugin'
+],
+```
+## [More Info](http://actionherojs.com/wiki/core/plugins.html)
