@@ -2,7 +2,8 @@ alligator-metrics
 =================
 alligator-metrics is a Ganglia metrics reporter.
 #Quick Start
-`git clone git://github.com/alligator-io/alligator-metrics.git`
+
+[![NPM](https://nodei.co/npm/alligator-metrics.png?downloads=true)](https://nodei.co/npm/alligator-metrics/)
 
 `vi config/metrics.js`
 

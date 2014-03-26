@@ -6,7 +6,6 @@
   "name": "alligator-metrics",
   "version": "0.3.0",
   "description": "Ganglia metrics reporter.",
-  "main": "./initializers/metrics.js",
   "scripts": {
     "start": "node node_modules/.bin/actionhero start"
   },
